@@ -1,10 +1,9 @@
 package com.senai.LivrariaFlores.livraria;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/livros")
@@ -20,6 +19,11 @@ public class LivroController {
         service.createLivro(livro);
 //        System.out.println(livro.getNome());
         return null;
+    }
+
+    @GetMapping
+    public List<Livro> listar() {
+        return service.getAllLivros();
     }
 
 }

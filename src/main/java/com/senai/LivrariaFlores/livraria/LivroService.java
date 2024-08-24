@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -30,6 +32,32 @@ public class LivroService {
             mapper.writeValue(new File(FILE_PATH), livros);
         } catch (IOException e) {
 //            trata as excessoes
+            e.printStackTrace();
+        }
+    }
+
+    public LivroService() {
+        carregarLivros();
+    }
+
+    public List<Livro> getAllLivros() {
+        return livros;
+    }
+
+    private void carregarLivros() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            File file = new File(FILE_PATH);
+            if (file.exists()) {
+                // Lê o arquivo .json e converte para um array de livros
+                Livro[] livrosArray = mapper.readValue(file, Livro[].class);
+                for (Livro livro : livrosArray) {
+                    // Lê a lista de livros que veio do .json e adiciona na lista de livros lá em cima
+                    livros.add(livro);
+                    counter.set(Math.max(counter.get(), livro.getId()));
+                }
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
