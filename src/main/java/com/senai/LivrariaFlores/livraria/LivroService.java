@@ -18,6 +18,7 @@ public class LivroService {
     private List<Livro> livros = new ArrayList<>();
     private AtomicLong counter = new AtomicLong();
 
+    // salva o livro
     public Livro createLivro(Livro livro) {
         livro.setId(counter.incrementAndGet());
         livros.add(livro);
@@ -36,6 +37,7 @@ public class LivroService {
         }
     }
 
+    // coleta todos os livros
     public LivroService() {
         carregarLivros();
     }
@@ -60,5 +62,43 @@ public class LivroService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // update livro
+    public Livro updateLivro(Long id, Livro livroDetails) {
+        // chama a função de coletar as infos do livro e armazena elas
+        Livro livro = getLivroById(id);
+        if (livro == null) {
+            throw new RuntimeException("Livro não encontrado com o id : " + id);
+        }
+
+        livro.setFotoCapa(livroDetails.getFotoCapa());
+        livro.setNome(livroDetails.getNome());
+        livro.setAutor(livroDetails.getAutor());
+        livro.setAno(livroDetails.getAno());
+        livro.setExemplares(livroDetails.getExemplares());
+
+        salvarLivros();
+        return livro;
+    }
+
+    // logica para capturar as informações do livro pelo id dele
+    public Livro getLivroById(Long id) {
+        for (Livro livro : livros) {
+            if (livro.getId().equals(id)) {
+                return livro;
+            }
+        }
+        return null;
+    }
+
+    // pega o livro específico pelo id
+    public void deleteLivro(Long id) {
+        Livro livro = getLivroById(id);
+        if (livro == null) {
+            throw new RuntimeException("Livro não encontrado com o id : " + id);
+        }
+        livros.remove(livro);
+        salvarLivros();
     }
 }

@@ -3,7 +3,9 @@ package com.senai.LivrariaFlores.livraria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/livros")
@@ -28,4 +30,25 @@ public class LivroController {
         return service.getAllLivros();
     }
 
+    @PutMapping("/{id}")
+    public Livro atualizaLivro(@PathVariable(value = "id") Long id,
+                               @RequestBody Livro livroDetails) {
+        Livro resultado = service.updateLivro(id, livroDetails);
+        return resultado;
+    }
+
+    // recupera um livro pelo id
+    @GetMapping("/{id}")
+    public Livro getLivro(@PathVariable Long id) {
+        Livro resultado = service.getLivroById(id);
+        return resultado;
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<String, Boolean> deleteLivro(@PathVariable(value = "id") Long id) {
+        service.deleteLivro(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("status", Boolean.TRUE);
+        return response;
+    }
 }
