@@ -1,76 +1,32 @@
 package com.senai.LivrariaFlores.livraria;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Optional;
 
 @Service
 public class LivroService {
-//    Coloca o caminho do arquivo na variável
-    private static final String FILE_PATH = "livros.json";
-    private List<Livro> livros = new ArrayList<>();
-    private AtomicLong counter = new AtomicLong();
 
-    // salva o livro
-    public Livro createLivro(Livro livro) {
-        livro.setId(counter.incrementAndGet());
-        livros.add(livro);
-        salvarLivros();
-        return livro;
+    @Autowired
+    private LivroJpaRepository repository;
+
+
+    public Optional<Livro> getById(Long id) {
+        return repository.findById(id);
     }
 
-    private void salvarLivros() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-//            salva o livro no local indicado pela "FILE_PATH"
-            mapper.writeValue(new File(FILE_PATH), livros);
-        } catch (IOException e) {
-//            trata as excessoes
-            e.printStackTrace();
-        }
+    public Livro criarLivro(Livro livro) {
+        return repository.save(livro);
     }
 
-    // coleta todos os livros
-    public LivroService() {
-        carregarLivros();
+    public List<Livro> getTodosLivros() {
+        return repository.findAll();
     }
 
-    public List<Livro> getAllLivros() {
-        return livros;
-    }
-
-    private void carregarLivros() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            File file = new File(FILE_PATH);
-            if (file.exists()) {
-                // Lê o arquivo .json e converte para um array de livros
-                Livro[] livrosArray = mapper.readValue(file, Livro[].class);
-                for (Livro livro : livrosArray) {
-                    // Lê a lista de livros que veio do .json e adiciona na lista de livros lá em cima
-                    livros.add(livro);
-                    counter.set(Math.max(counter.get(), livro.getId()));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // update livro
-    public Livro updateLivro(Long id, Livro livroDetails) {
-        // chama a função de coletar as infos do livro e armazena elas
-        Livro livro = getLivroById(id);
-        if (livro == null) {
-            throw new RuntimeException("Livro não encontrado com o id : " + id);
-        }
+    public Livro atualizarLivro(Long id, Livro livroDetails) {
+        Livro livro = repository.findById(id).orElseThrow(() -> new RuntimeException("Livro not found for this id :: " + id));
 
         livro.setFotoCapa(livroDetails.getFotoCapa());
         livro.setNome(livroDetails.getNome());
@@ -78,27 +34,12 @@ public class LivroService {
         livro.setAno(livroDetails.getAno());
         livro.setExemplares(livroDetails.getExemplares());
 
-        salvarLivros();
-        return livro;
+        return repository.save(livro);
     }
 
-    // logica para capturar as informações do livro pelo id dele
-    public Livro getLivroById(Long id) {
-        for (Livro livro : livros) {
-            if (livro.getId().equals(id)) {
-                return livro;
-            }
-        }
-        return null;
+    public void excluirLivro(Long id) {
+        Livro livro = repository.findById(id).orElseThrow(() -> new RuntimeException("Livro not found for this id :: " + id));
+        repository.delete(livro);
     }
 
-    // pega o livro específico pelo id
-    public void deleteLivro(Long id) {
-        Livro livro = getLivroById(id);
-        if (livro == null) {
-            throw new RuntimeException("Livro não encontrado com o id : " + id);
-        }
-        livros.remove(livro);
-        salvarLivros();
-    }
 }
