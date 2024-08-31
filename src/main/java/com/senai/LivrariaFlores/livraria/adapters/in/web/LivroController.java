@@ -20,9 +20,6 @@ import java.util.Map;
 public class LivroController {
 
     @Autowired
-    private LivroService service;
-
-    @Autowired
     private CreateLivroUseCase createLivroUseCase;
     @Autowired
     private DeleteLivroUseCase deleteLivroUseCase;
@@ -33,31 +30,31 @@ public class LivroController {
 
     @PostMapping()
     public Livro criarLivro(@RequestBody Livro livro) {
-        Livro resultado = service.cadastrarLivro(livro);
+        Livro resultado = createLivroUseCase.cadastrarLivro(livro);
         return resultado;
     }
 
     @GetMapping
     public List<Livro> listar() {
-        return service.getLivros();
+        return getLivroUseCase.getLivros();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Livro> getLivro(@PathVariable Long id) {
-        Livro livro = service.getLivro(id);
+        Livro livro = getLivroUseCase.getLivro(id);
         return ResponseEntity.ok().body(livro);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Livro> atualizarLivro(@PathVariable(value = "id") Long id,
                                                 @RequestBody Livro livroDetails) {
-        Livro updatedLivro = service.updateLivro(livroDetails, id);
+        Livro updatedLivro = updateLivroUseCase.updateLivro(livroDetails, id);
         return ResponseEntity.ok(updatedLivro);
     }
 
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteLivro(@PathVariable(value = "id") Long id) {
-        service.excluirLivro(id);
+        deleteLivroUseCase.deleteLivro(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
