@@ -1,5 +1,7 @@
-package com.senai.LivrariaFlores.livraria;
+package com.senai.LivrariaFlores.livraria.adapters.in.web;
 
+import com.senai.LivrariaFlores.livraria.application.domain.Livro;
+import com.senai.LivrariaFlores.livraria.application.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.senai.LivrariaFlores.livraria;
+package com.senai.LivrariaFlores.livraria.adapters.out.persistense;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import lombok.*;
 @Data
 @Entity
 @Table(name = "livros")
-public class Livro {
+public class LivroEntity {
     // seta o id como chave primária da tabela
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

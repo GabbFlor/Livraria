@@ -1,5 +1,7 @@
-package com.senai.LivrariaFlores.livraria;
+package com.senai.LivrariaFlores.livraria.application;
 
+import com.senai.LivrariaFlores.livraria.application.domain.Livro;
+import com.senai.LivrariaFlores.livraria.adapters.out.persistense.LivroJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
