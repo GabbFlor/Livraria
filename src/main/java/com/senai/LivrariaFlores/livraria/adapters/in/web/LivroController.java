@@ -2,6 +2,10 @@ package com.senai.LivrariaFlores.livraria.adapters.in.web;
 
 import com.senai.LivrariaFlores.livraria.application.domain.Livro;
 import com.senai.LivrariaFlores.livraria.application.LivroService;
+import com.senai.LivrariaFlores.livraria.application.ports.in.CreateLivroUseCase;
+import com.senai.LivrariaFlores.livraria.application.ports.in.DeleteLivroUseCase;
+import com.senai.LivrariaFlores.livraria.application.ports.in.GetLivroUseCase;
+import com.senai.LivrariaFlores.livraria.application.ports.in.UpdateLivroUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,15 @@ public class LivroController {
 
     @Autowired
     private LivroService service;
+
+    @Autowired
+    private CreateLivroUseCase createLivroUseCase;
+    @Autowired
+    private DeleteLivroUseCase deleteLivroUseCase;
+    @Autowired
+    private GetLivroUseCase getLivroUseCase;
+    @Autowired
+    private UpdateLivroUseCase updateLivroUseCase;
 
     @PostMapping()
     public Livro criarLivro(@RequestBody Livro livro) {
