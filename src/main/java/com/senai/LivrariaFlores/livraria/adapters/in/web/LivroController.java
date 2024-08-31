@@ -33,25 +33,25 @@ public class LivroController {
 
     @PostMapping()
     public Livro criarLivro(@RequestBody Livro livro) {
-        Livro resultado = service.criarLivro(livro);
+        Livro resultado = service.cadastrarLivro(livro);
         return resultado;
     }
 
     @GetMapping
     public List<Livro> listar() {
-        return service.getTodosLivros();
+        return service.getLivros();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Livro> getLivro(@PathVariable Long id) {
-        Livro livro = service.getById(id).orElseThrow(() -> new RuntimeException("Livro not found for this id :: " + id));
+        Livro livro = service.getLivro(id);
         return ResponseEntity.ok().body(livro);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Livro> atualizarLivro(@PathVariable(value = "id") Long id,
                                                 @RequestBody Livro livroDetails) {
-        Livro updatedLivro = service.atualizarLivro(id, livroDetails);
+        Livro updatedLivro = service.updateLivro(livroDetails, id);
         return ResponseEntity.ok(updatedLivro);
     }
 
